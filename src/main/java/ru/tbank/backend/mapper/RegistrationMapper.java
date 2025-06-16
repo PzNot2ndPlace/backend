@@ -1,7 +1,6 @@
 package ru.tbank.backend.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import ru.tbank.backend.dto.CreateUserDto;
 import ru.tbank.backend.dto.RegistrationRequestDto;
 

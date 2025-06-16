@@ -2,7 +2,6 @@ package ru.tbank.backend.service;
 
 import ru.tbank.backend.dto.CreateUserDto;
 import ru.tbank.backend.dto.UserDto;
-import ru.tbank.backend.entity.UserEntity;
 
 import java.util.UUID;
 

@@ -2,16 +2,15 @@ package ru.tbank.backend.service.impl;
 
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tbank.backend.config.exceptions.BadRequestException;
+import ru.tbank.backend.config.userDetails.CustomUserDetails;
 import ru.tbank.backend.config.userDetails.CustomUserDetailsService;
 import ru.tbank.backend.dto.CreateUserDto;
-import ru.tbank.backend.config.userDetails.CustomUserDetails;
 import ru.tbank.backend.dto.LoginRequestDto;
 import ru.tbank.backend.dto.RegistrationRequestDto;
 import ru.tbank.backend.mapper.RegistrationMapper;
