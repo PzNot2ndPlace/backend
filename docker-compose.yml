@@ -13,6 +13,7 @@ services:
     ports:
       - "5430:5432"
   notes-app:
+    image: ${CI_REGISTRY_IMAGE}/notes-app:${APP_VERSION}
     build:
       dockerfile: Dockerfile
       context: .
