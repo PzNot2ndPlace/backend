@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<!--
+  ~ Dossier SAR, proprietary and confidential software.
+  ~ Copyright (C) 2022 by Bank of Russia. All Rights Reserved.
+  ~
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited.
+  -->
+
+<!DOCTYPE suppressions PUBLIC
+        "-//Puppy Crawl//DTD Suppressions 1.1//EN"
+        "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
+
+<suppressions>
+</suppressions>
