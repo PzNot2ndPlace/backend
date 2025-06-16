@@ -27,16 +27,19 @@ jobs:
 
       - name: Build Docker images
         env:
-          CI_REGISTRY_IMAGE: ${{ secrets.CI_REGISTRY_IMAGE }}
+          CI_REGISTRY_IMAGE: docker.io/brawleryura1
         run: docker-compose build notes-app
+
+      - name: List images
+        run: docker images
 
       - name: Tag Docker images
         run: |
-          docker tag ${{ secrets.CI_REGISTRY_IMAGE }}/notes-app:$APP_VERSION ${{ secrets.CI_REGISTRY_IMAGE }}/notes-app:latest
+          docker tag docker.io/brawleryura1/notes-app:$APP_VERSION docker.io/brawleryura1/notes-app:latest
 
       - name: Push Docker images
         run: |
-          docker push -a ${{ secrets.CI_REGISTRY_IMAGE }}/notes-app
+          docker push -a docker.io/brawleryura1/notes-app
 
       - name: Display build completion date
         run: echo "Build completed on $(date)"
