@@ -141,7 +141,7 @@
                             <version>0.2.0</version>
                         </path>
                     </annotationProcessorPaths>
-                    <release>23</release>
+                    <release>21</release>
                 </configuration>
             </plugin>
             <plugin>
