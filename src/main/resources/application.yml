@@ -16,3 +16,6 @@ spring:
 jwt:
   signing-key: ${JWT_SIGNING_KEY}
   expiration-time: 10000000
+
+firebase:
+  credentials: ${FIREBASE_CONFIG_JSON:#{null}}

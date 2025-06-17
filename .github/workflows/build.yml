@@ -25,6 +25,18 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           username: ${{ secrets.DOCKER_USER }}
 
+      - name: Validate Firebase config
+        run: |
+          if [ -z "$FIREBASE_CONFIG_JSON" ]; then
+            echo "::error::Firebase config is empty"
+            exit 1
+          fi
+          
+          echo "$FIREBASE_CONFIG_JSON" | jq empty || {
+            echo "::error::Invalid Firebase JSON configuration"
+            exit 1
+          }
+
       - name: Clean old Docker images
         run: |
           docker system prune -a -f || true
@@ -90,6 +102,7 @@ jobs:
           SPRING_DATASOURCE_USERNAME: ${{ secrets.POSTGRES_USER }}
           SPRING_DATASOURCE_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           JWT_SIGNING_KEY: ${{ secrets.JWT_SIGNING_KEY }}
+          FIREBASE_CONFIG_JSON: ${{ secrets.FIREBASE_CONFIG_JSON }}
         run: |
           docker run -d \
             --name notes-app \
