@@ -5,7 +5,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import ru.tbank.backend.dto.NoteDtoWithTriggers;
 import ru.tbank.backend.dto.NoteProjection;
-import ru.tbank.backend.dto.WeatherResponse;
 import ru.tbank.backend.enums.CategoryType;
 import ru.tbank.backend.mapper.NoteMapper;
 import ru.tbank.backend.repository.NoteRepository;
@@ -24,7 +23,7 @@ public class TimeTriggerSchedulerService {
     private final NotificationService notificationService;
     private final NoteMapper noteMapper;
 
-    private static final List<CategoryType> weatherActivationCategoryTypes = List.of(
+    private static final List<CategoryType> WEATHER_ACTIVATION_CATEGORY_TYPES = List.of(
             CategoryType.EVENT, CategoryType.LOCATION, CategoryType.ROUTINE,
             CategoryType.MEETING, CategoryType.SHOPPING
     );
@@ -46,7 +45,7 @@ public class TimeTriggerSchedulerService {
 
             message.append("⏰ Напоминание: ").append(trigger.getText());
 
-            if (weatherActivationCategoryTypes.stream().anyMatch(categoryType -> categoryType.equals(category))) {
+            if (WEATHER_ACTIVATION_CATEGORY_TYPES.stream().anyMatch(categoryType -> categoryType.equals(category))) {
                 String weatherString = weatherService.getWeatherString();
                 message.append("\n");
                 message.append(weatherString);
