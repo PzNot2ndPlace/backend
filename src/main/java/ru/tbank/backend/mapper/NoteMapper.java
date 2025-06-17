@@ -9,11 +9,13 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 public class NoteMapper {
-    // Добавляем кастомный форматтер для даты из БД
     private static final DateTimeFormatter DB_DATE_FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSx");
 
@@ -48,7 +50,6 @@ public class NoteMapper {
         return switch (projection.getTriggerType()) {
             case TIME -> {
                 try {
-                    // Парсим с кастомным форматом
                     OffsetDateTime time = OffsetDateTime.parse(
                             projection.getTriggerValue(),
                             DB_DATE_FORMATTER
@@ -87,6 +88,38 @@ public class NoteMapper {
                 .updatedAt(projection.getUpdatedAtAsOffset())
                 .categoryType(CategoryType.valueOf(projection.getCategoryType()))
                 .trigger(mapToTriggerDto(projection))
+                .build();
+    }
+
+    public List<NoteDtoWithTriggers> mapToNoteDtoWithTriggers(List<NoteProjection> projections) {
+        Map<UUID, List<NoteProjection>> groupedProjections = projections.stream()
+                .collect(Collectors.groupingBy(NoteProjection::getId));
+
+        return groupedProjections.values().stream()
+                .map(this::mapGroupToNoteDtoWithTriggers)
+                .toList();
+    }
+
+    private NoteDtoWithTriggers mapGroupToNoteDtoWithTriggers(List<NoteProjection> group) {
+        if (group.isEmpty()) {
+            return null;
+        }
+
+        NoteProjection first = group.get(0);
+
+        List<TriggerDto> triggers = group.stream()
+                .map(this::mapToTriggerDto)
+                .filter(Objects::nonNull)
+                .toList();
+
+        return NoteDtoWithTriggers.builder()
+                .id(first.getId())
+                .userId(first.getUserId())
+                .text(first.getText())
+                .createdAt(first.getCreatedAtAsOffset())
+                .updatedAt(first.getUpdatedAtAsOffset())
+                .categoryType(CategoryType.valueOf(first.getCategoryType()))
+                .triggers(triggers)
                 .build();
     }
 }

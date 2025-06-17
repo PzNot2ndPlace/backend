@@ -3,6 +3,7 @@ package ru.tbank.backend.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.tbank.backend.dto.NoteDto;
+import ru.tbank.backend.dto.NoteDtoWithTriggers;
 import ru.tbank.backend.dto.NoteTextDto;
 import ru.tbank.backend.mapper.NoteMapper;
 import ru.tbank.backend.repository.NoteRepository;
@@ -19,14 +20,17 @@ public class NoteServiceImpl implements NoteService {
     private final NoteMapper noteMapper;
 
     @Override
-    public NoteDto processText(NoteTextDto noteText) {
-        return null;
+    public NoteDtoWithTriggers processText(NoteTextDto noteText) {
+
+        //TODO отправка на LLM на обработку при получении сохранить и отправить пользователю
+
+        var projections = noteRepository.findNote(UUID.fromString("0622339d-4868-4829-a681-ac50be2cf623"));
+        return noteMapper.mergeProjections(projections);
     }
 
     @Override
-    public List<NoteDto> getNotesByUserId(UUID userId) {
-        var projections = noteRepository.findNote(UUID.fromString("0622339d-4868-4829-a681-ac50be2cf623"));
-        var dtos = noteMapper.mergeProjections(projections);
-        return null;
+    public List<NoteDtoWithTriggers> getNotesByUserId(UUID userId) {
+        var projections = noteRepository.findByUserId(userId);
+        return noteMapper.mapToNoteDtoWithTriggers(projections);
     }
 }

@@ -21,7 +21,6 @@ import java.util.UUID;
 })
 public abstract class TriggerDto {
     private UUID id;
-    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "triggerType")
     private TriggerType triggerType;
     private Boolean isReady;
 }

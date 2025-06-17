@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.tbank.backend.config.userDetails.CustomUserDetails;
 import ru.tbank.backend.dto.NoteDto;
+import ru.tbank.backend.dto.NoteDtoWithTriggers;
 import ru.tbank.backend.dto.NoteTextDto;
 import ru.tbank.backend.service.NoteService;
 
@@ -29,7 +30,7 @@ public class NoteController {
             description = "Позволяет пользователю отправить текст заметки на обработку и получить готовую заметку"
     )
     @PostMapping("/process-text")
-    private NoteDto sendText(
+    private NoteDtoWithTriggers sendText(
             @RequestBody NoteTextDto noteText
     ) {
         return noteService.processText(noteText);
@@ -40,11 +41,11 @@ public class NoteController {
             description = "Позволяет пользователю получить свои заметки"
     )
     @PostMapping("/my")
-    private List<NoteDto> getMyNotes(
+    private List<NoteDtoWithTriggers> getMyNotes(
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
         //TODO фильтры пагинации
-        return noteService.getNotesByUserId(UUID.randomUUID());
+        return noteService.getNotesByUserId(customUserDetails.getId());
     }
 
 }
