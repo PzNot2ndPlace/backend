@@ -92,4 +92,4 @@ jobs:
             -e SPRING_DATASOURCE_USERNAME="$SPRING_DATASOURCE_USERNAME" \
             -e SPRING_DATASOURCE_PASSWORD="$SPRING_DATASOURCE_PASSWORD" \
             -e JWT_SIGNING_KEY="$JWT_SIGNING_KEY" \
-            brawleryura1/notes-app:latest
+            brawleryura1/notes-app:${{ env.APP_VERSION }}
