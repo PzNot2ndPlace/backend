@@ -15,4 +15,8 @@ public class GptResponse {
 
     private List<GptTriggerResponse> triggers;
 
+    private String status;
+
+    private String message;
+
 }
