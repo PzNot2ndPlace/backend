@@ -24,35 +24,42 @@ import java.nio.charset.StandardCharsets;
 public class FirebaseConfig {
 
     @Value("${firebase.credentials}")
-    private String firebaseConfigJson;
+    private String firebaseConfig;
 
     @PostConstruct
-    public void initialize() {
-        if (FirebaseApp.getApps().isEmpty()) {
-            try {
-                FirebaseOptions options = FirebaseOptions.builder()
-                        .setCredentials(getCredentials())
-                        .build();
+    public void init() {
+        if (firebaseConfig == null) {
+            log.warn("Firebase config not found. Firebase features will be disabled.");
+            return;
+        }
 
+        try {
+            FirebaseOptions options = FirebaseOptions.builder()
+                    .setCredentials(GoogleCredentials.fromStream(
+                            new ByteArrayInputStream(firebaseConfig.getBytes())))
+                    .build();
+
+            if (FirebaseApp.getApps().isEmpty()) {
                 FirebaseApp.initializeApp(options);
-                log.info("Firebase Admin SDK initialized successfully");
-
-            } catch (IOException e) {
-                log.error("Failed to initialize Firebase Admin SDK", e);
-                throw new IllegalStateException("Firebase initialization failed", e);
+                log.info("Firebase initialized successfully");
             }
+        } catch (IOException e) {
+            log.error("Failed to initialize Firebase", e);
         }
     }
 
-    private GoogleCredentials getCredentials() throws IOException {
-        if (firebaseConfigJson == null || firebaseConfigJson.isBlank()) {
-            throw new IllegalStateException("Firebase config not found in environment variables");
+    @Bean
+    public FirebaseMessaging firebaseMessaging() {
+        if (firebaseConfig == null) {
+            log.warn("FirebaseMessaging bean is not available - no config provided");
+            return null;
         }
 
-        log.debug("Initializing Firebase from environment variable");
-        try (InputStream is = new ByteArrayInputStream(
-                firebaseConfigJson.getBytes(StandardCharsets.UTF_8))) {
-            return GoogleCredentials.fromStream(is);
+        try {
+            return FirebaseMessaging.getInstance();
+        } catch (IllegalStateException e) {
+            log.error("Failed to create FirebaseMessaging bean", e);
+            return null;
         }
     }
 }
