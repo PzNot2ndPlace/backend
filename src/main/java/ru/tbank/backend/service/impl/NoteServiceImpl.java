@@ -79,7 +79,7 @@ public class NoteServiceImpl implements NoteService {
             ));
         }
 
-        if (Objects.equals(response.getStatus(), "success")) {
+        if (response.getStatus() == null || Objects.equals(response.getStatus(), "success")) {
             triggerRepository.saveAll(triggerEntities);
             noteRepository.save(noteEntity);
             noteTriggerRepository.saveAll(noteTriggerEntities);
