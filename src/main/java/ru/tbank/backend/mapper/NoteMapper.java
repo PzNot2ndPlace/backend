@@ -2,6 +2,7 @@ package ru.tbank.backend.mapper;
 
 import org.springframework.stereotype.Component;
 import ru.tbank.backend.dto.*;
+import ru.tbank.backend.entity.*;
 import ru.tbank.backend.enums.CategoryType;
 import ru.tbank.backend.enums.TriggerType;
 
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
@@ -136,6 +138,60 @@ public class NoteMapper {
                 .updatedAt(first.getUpdatedAtAsOffset())
                 .categoryType(CategoryType.valueOf(first.getCategoryType()))
                 .triggers(triggers)
+                .build();
+    }
+
+    public NoteDtoWithTriggersResponse mapToNoteDtoWithTriggersResponse(
+            NoteEntity note,
+            List<NoteTriggerEntity> noteTriggerEntities,
+            List<TriggerEntity> triggerEntities,
+            GptResponse gptResponse
+    ) {
+        Map<UUID, NoteTriggerEntity> triggerIdToNoteTrigger = noteTriggerEntities.stream()
+                .collect(Collectors.toMap(NoteTriggerEntity::getTriggerId, Function.identity()));
+
+        List<TriggerDto> triggerDtos = triggerEntities.stream()
+                .map(triggerEntity -> {
+                    NoteTriggerEntity noteTrigger = triggerIdToNoteTrigger.get(triggerEntity.getId());
+                    if (noteTrigger == null) {
+                        return null;
+                    }
+
+                    if (triggerEntity instanceof TriggerTimeEntity timeEntity) {
+                        return new TriggerTimeDto(
+                                triggerEntity.getId(),
+                                noteTrigger.getTriggerType(),
+                                noteTrigger.getIsReady(),
+                                timeEntity.getTime()
+                        );
+                    } else if (triggerEntity instanceof TriggerLocationEntity locationEntity) {
+                        return new TriggerLocationDto(
+                                triggerEntity.getId(),
+                                noteTrigger.getTriggerType(),
+                                noteTrigger.getIsReady(),
+                                locationEntity.getLocation()
+                        );
+                    } else {
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .toList();
+
+        NoteDtoWithTriggers noteDto = NoteDtoWithTriggers.builder()
+                .id(note.getId())
+                .userId(note.getUserId())
+                .text(note.getText())
+                .createdAt(note.getCreatedAt())
+                .updatedAt(note.getUpdatedAt())
+                .categoryType(note.getCategoryType())
+                .triggers(triggerDtos)
+                .build();
+
+        return NoteDtoWithTriggersResponse.builder()
+                .noteDto(noteDto)
+                .status(gptResponse.getStatus())
+                .message(gptResponse.getMessage())
                 .build();
     }
 }
