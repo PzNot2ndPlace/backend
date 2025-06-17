@@ -1,6 +1,7 @@
 package ru.tbank.backend.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -39,7 +40,15 @@ public class LocationController {
     }
 
     @GetMapping()
-    public List<LocationDto>  getLocations(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+    public List<LocationDto> getLocations(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
         return locationService.getLocations(customUserDetails.getId());
+    }
+
+    @PostMapping("coords")
+    public void postCoords(
+        @AuthenticationPrincipal CustomUserDetails customUserDetails,
+        @RequestParam() String coords
+    ) {
+        locationService.acceptCoords(customUserDetails.getId(), coords);
     }
 }
