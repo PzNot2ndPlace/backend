@@ -7,9 +7,12 @@ import ru.tbank.backend.dto.NoteProjection;
 import ru.tbank.backend.entity.NoteEntity;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface NoteRepository extends JpaRepository<NoteEntity, UUID> {
+
+    Optional<NoteEntity> findNoteEntityById(UUID id);
 
     @Query(value = """
                 SELECT n.id,
