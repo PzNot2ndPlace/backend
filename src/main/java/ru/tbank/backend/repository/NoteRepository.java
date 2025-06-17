@@ -86,4 +86,27 @@ public interface NoteRepository extends JpaRepository<NoteEntity, UUID> {
             nativeQuery = true)
     List<NoteProjection> findTimeTriggers();
 
+    @Query(value = """
+        SELECT
+            n.id AS id,
+            n.user_id AS userId,
+            n.text AS text,
+            n.created_at AS createdAt,
+            n.updated_at AS updatedAt,
+            n.category_type AS categoryType,
+            nt.trigger_id AS triggerId,
+            nt.trigger_type AS triggerType,
+            nt.is_ready AS isReady,
+            tl.location::text AS triggerValue
+        FROM note_trigger nt
+                JOIN trigger_location tl ON nt.trigger_id = tl.id
+                JOIN note n ON nt.note_id = n.id
+        WHERE nt.trigger_type = 'LOCATION'
+        AND nt.is_ready = false
+        AND tl.location = :location
+        AND n.user_id = :userId
+        """,
+        nativeQuery = true)
+    List<NoteProjection> findLocationNotes(@Param("userId") UUID userId, @Param("location") String location);
+
 }
