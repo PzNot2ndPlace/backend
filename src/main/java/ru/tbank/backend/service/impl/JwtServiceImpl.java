@@ -5,6 +5,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.util.function.Function;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class JwtServiceImpl implements JwtService {
 
     @Value("${jwt.signing-key}")
@@ -39,12 +41,18 @@ public class JwtServiceImpl implements JwtService {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String userName = extractUserName(token);
-        return (
-                userName.equals(userDetails.getUsername())
-                        && !isTokenExpired(token)
-                        && !isTokenBanned(token)
-        );
+        try {
+            final String userName = extractUserName(token);
+            boolean isValid = userName.equals(userDetails.getUsername())
+                    && !isTokenExpired(token)
+                    && !isTokenBanned(token);
+
+            log.info("Token validation result: " + isValid);
+            return isValid;
+        } catch (Exception e) {
+            log.error("Token validation error", e);
+            return false;
+        }
     }
 
     public void banToken(String token) {

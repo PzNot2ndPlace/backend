@@ -4,5 +4,6 @@
 https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
     <include file="/db/changelog/changesets/2506162200_init_db.xml"/>
+    <include file="/db/changelog/changesets/2506171000_create_triggers_and_notes.xml"/>
 
 </databaseChangeLog>
