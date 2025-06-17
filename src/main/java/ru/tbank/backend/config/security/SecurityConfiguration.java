@@ -32,8 +32,7 @@ public class SecurityConfiguration {
     @Bean
     public List<String> unprotectedEndpoints() {
         return List.of(
-                "/auth/**",
-                "/note/**"
+                "/auth/**"
         );
     }
 

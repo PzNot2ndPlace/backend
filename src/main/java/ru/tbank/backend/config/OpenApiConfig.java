@@ -55,7 +55,12 @@ public class OpenApiConfig {
     }
 
     private boolean isEndpointProtected(String path) {
-        return false;
+        for (String endpoint: unprotectedEndpoints) {
+            if (path.startsWith(endpoint)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void applySecurityToOperations(PathItem pathItem, String securitySchemeName) {
