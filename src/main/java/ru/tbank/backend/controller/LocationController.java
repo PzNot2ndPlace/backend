@@ -34,4 +34,4 @@ public class LocationController {
     public LocationsDto getMethodName(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
         return locationService.getLocations(customUserDetails.getId());
     }
-}   
+}

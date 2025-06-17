@@ -29,7 +29,7 @@ public class LocationService {
 
         List<LocationEntity> locations = locationRepository.findAllByUserId(userId);
         List<String> result = new LinkedList<>();
-        for(LocationEntity e: locations) {
+        for (LocationEntity e : locations) {
             result.add(e.getName());
         }
         return new LocationsDto(result);
