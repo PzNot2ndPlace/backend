@@ -1,15 +1,10 @@
 package ru.tbank.backend.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.tbank.backend.enums.CategoryType;
-import ru.tbank.backend.utils.CategoryTypeConverter;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -37,7 +32,7 @@ public class NoteEntity {
     private OffsetDateTime updatedAt;
 
     @Column(name = "category_type")
-    @Convert(converter = CategoryTypeConverter.class)
+    @Enumerated(EnumType.STRING)
     private CategoryType categoryType;
 
 }

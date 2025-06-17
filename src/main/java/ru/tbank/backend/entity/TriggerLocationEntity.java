@@ -18,4 +18,9 @@ public class TriggerLocationEntity extends TriggerEntity {
     @Column(name = "location")
     private String location;
 
+    public TriggerLocationEntity(UUID id, String location) {
+        this.setId(id);
+        this.location = location;
+    }
+
 }
