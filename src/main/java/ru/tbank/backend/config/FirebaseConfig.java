@@ -32,7 +32,7 @@ public class FirebaseConfig {
                         new ByteArrayInputStream(firebaseConfig.getBytes())))
                 .build();
 
-        FirebaseApp app = FirebaseApp.initializeApp(options, "patterns2");
+        FirebaseApp app = FirebaseApp.initializeApp(options, "notes");
         return FirebaseMessaging.getInstance(app);
     }
 }
