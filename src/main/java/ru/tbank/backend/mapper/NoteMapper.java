@@ -116,7 +116,7 @@ public class NoteMapper {
                 .toList();
     }
 
-    private NoteDtoWithTriggers mapGroupToNoteDtoWithTriggers(List<NoteProjection> group) {
+    public NoteDtoWithTriggers mapGroupToNoteDtoWithTriggers(List<NoteProjection> group) {
         if (group.isEmpty()) {
             return null;
         }

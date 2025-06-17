@@ -64,4 +64,26 @@ public interface NoteRepository extends JpaRepository<NoteEntity, UUID> {
             """, nativeQuery = true)
     List<NoteProjection> findByUserId(@Param("userId") UUID userId);
 
+    @Query(value = """
+            SELECT
+                n.id AS id,
+                n.user_id AS userId,
+                n.text AS text,
+                n.created_at AS createdAt,
+                n.updated_at AS updatedAt,
+                n.category_type AS categoryType,
+                nt.trigger_id AS triggerId,
+                nt.trigger_type AS triggerType,
+                nt.is_ready AS isReady,
+                tt.time::text AS triggerValue
+            FROM note_trigger nt
+                     JOIN trigger_time tt ON nt.trigger_id = tt.id
+                     JOIN note n ON nt.note_id = n.id
+            WHERE nt.trigger_type = 'TIME'
+              AND nt.is_ready = false
+              AND ABS(EXTRACT(EPOCH FROM (tt.time - CURRENT_TIMESTAMP))) <= 60
+            """,
+            nativeQuery = true)
+    List<NoteProjection> findTimeTriggers();
+
 }
