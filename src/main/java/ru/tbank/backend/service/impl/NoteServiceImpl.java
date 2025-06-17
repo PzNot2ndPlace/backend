@@ -83,6 +83,13 @@ public class NoteServiceImpl implements NoteService {
             triggerRepository.saveAll(triggerEntities);
             noteRepository.save(noteEntity);
             noteTriggerRepository.saveAll(noteTriggerEntities);
+        } else {
+            return noteMapper.mapToNoteDtoWithTriggersResponse(
+                    noteEntity,
+                    noteTriggerEntities,
+                    triggerEntities,
+                    response
+            );
         }
 
         var projections = noteRepository.findNote(noteEntity.getId());
