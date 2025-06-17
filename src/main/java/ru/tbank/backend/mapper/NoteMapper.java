@@ -19,6 +19,9 @@ public class NoteMapper {
     private static final DateTimeFormatter DB_DATE_FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSx");
 
+    private static final DateTimeFormatter DB_DATE_FORMATTER_WITH_SECONDS =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssx");
+
     public NoteDtoWithTriggers mergeProjections(List<NoteProjection> projections) {
         if (projections.isEmpty()) {
             return null;
@@ -60,11 +63,24 @@ public class NoteMapper {
                             projection.getIsReady(),
                             time
                     );
-                } catch (DateTimeParseException e) {
-                    throw new RuntimeException(
-                            "Failed to parse trigger time: " + projection.getTriggerValue(),
-                            e
-                    );
+                } catch (DateTimeParseException ex) {
+                    try {
+                        OffsetDateTime time = OffsetDateTime.parse(
+                                projection.getTriggerValue(),
+                                DB_DATE_FORMATTER_WITH_SECONDS
+                        );
+                        yield new TriggerTimeDto(
+                                projection.getTriggerId(),
+                                TriggerType.TIME,
+                                projection.getIsReady(),
+                                time
+                        );
+                    } catch (DateTimeParseException e) {
+                        throw new RuntimeException(
+                                "Failed to parse trigger time: " + projection.getTriggerValue(),
+                                e
+                        );
+                    }
                 }
             }
             case LOCATION -> new TriggerLocationDto(
