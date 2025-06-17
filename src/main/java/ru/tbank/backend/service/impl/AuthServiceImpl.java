@@ -13,6 +13,7 @@ import ru.tbank.backend.config.userDetails.CustomUserDetailsService;
 import ru.tbank.backend.dto.CreateUserDto;
 import ru.tbank.backend.dto.LoginRequestDto;
 import ru.tbank.backend.dto.RegistrationRequestDto;
+import ru.tbank.backend.dto.TokenResponse;
 import ru.tbank.backend.mapper.RegistrationMapper;
 import ru.tbank.backend.service.AuthService;
 import ru.tbank.backend.service.JwtService;
@@ -29,7 +30,7 @@ public class AuthServiceImpl implements AuthService {
     private final RegistrationMapper registrationMapper;
 
     @Transactional
-    public String register(RegistrationRequestDto registrationRequest) {
+    public TokenResponse register(RegistrationRequestDto registrationRequest) {
         String hashedPassword = passwordEncoder.encode(registrationRequest.getPassword());
 
         CreateUserDto userCreateDto = registrationMapper.toCreateUserDtoWithPassword(
@@ -48,14 +49,14 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Transactional
-    public String login(LoginRequestDto request) {
+    public TokenResponse login(LoginRequestDto request) {
         CustomUserDetails userDetails = customUserDetailsService.loadUserByUsername(request.getEmail());
 
         if (!passwordEncoder.matches(request.getPassword(), userDetails.getPassword())) {
             throw new BadRequestException("Неверный логин или пароль");
         }
 
-        return jwtService.generateToken(userDetails);
+        return TokenResponse.builder().token(jwtService.generateToken(userDetails)).build();
     }
 
     @Transactional

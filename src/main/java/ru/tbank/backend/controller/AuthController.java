@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.tbank.backend.dto.LoginRequestDto;
 import ru.tbank.backend.dto.RegistrationRequestDto;
+import ru.tbank.backend.dto.TokenResponse;
 import ru.tbank.backend.service.AuthService;
 
 @RestController
@@ -25,7 +26,7 @@ public class AuthController {
             description = "Позволяет пользователю зарегистрироваться в системе"
     )
     @PostMapping("/registration")
-    private String registration(
+    private TokenResponse registration(
             @RequestBody @Valid RegistrationRequestDto registrationRequest
     ) {
         return authService.register(registrationRequest);
@@ -36,7 +37,7 @@ public class AuthController {
             description = "Позволяет пользователю войти в учетную запись"
     )
     @PostMapping("/login")
-    private String login(
+    private TokenResponse login(
             @RequestBody @Valid LoginRequestDto loginRequest
     ) {
         return authService.login(loginRequest);
