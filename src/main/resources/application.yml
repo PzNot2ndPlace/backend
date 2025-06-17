@@ -15,7 +15,10 @@ spring:
 
 jwt:
   signing-key: ${JWT_SIGNING_KEY}
-  expiration-time: 10000000
+  expiration-time: 100000000000000
 
 firebase:
   credentials: ${FIREBASE_CONFIG_JSON}
+
+weatherApi:
+  token: 5390f8d494c44cde982164605251706
