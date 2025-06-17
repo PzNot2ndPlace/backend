@@ -10,6 +10,7 @@ public enum CategoryType {
     MEETING,
     DEADLINE,
     HEALTH,
+    ROUTINE,
     OTHER;
 
 }
