@@ -1,14 +1,9 @@
 package ru.tbank.backend.entity;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.tbank.backend.enums.CategoryType;
-import ru.tbank.backend.utils.CategoryTypeConverter;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -20,5 +15,10 @@ public class TriggerTimeEntity extends TriggerEntity {
 
     @Column(name = "time")
     private OffsetDateTime time;
+
+    public TriggerTimeEntity(UUID id, OffsetDateTime time) {
+        this.setId(id);
+        this.time = time;
+    }
 
 }
