@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "trigger_location")
@@ -20,7 +21,7 @@ public class TriggerLocationEntity extends TriggerEntity {
 
     public TriggerLocationEntity(UUID id, String location) {
         this.setId(id);
-        this.location = location;
+        this.setLocation(location);
     }
 
 }

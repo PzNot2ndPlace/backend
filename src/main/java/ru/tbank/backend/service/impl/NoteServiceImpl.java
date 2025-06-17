@@ -3,13 +3,13 @@ package ru.tbank.backend.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.tbank.backend.config.exceptions.BadRequestException;
+import ru.tbank.backend.config.exceptions.ForbiddenException;
 import ru.tbank.backend.dto.GptResponse;
 import ru.tbank.backend.dto.NoteDtoWithTriggers;
 import ru.tbank.backend.dto.NoteTextDto;
 import ru.tbank.backend.dto.TriggerDto;
-import ru.tbank.backend.entity.NoteEntity;
-import ru.tbank.backend.entity.NoteTriggerEntity;
-import ru.tbank.backend.entity.TriggerEntity;
+import ru.tbank.backend.entity.*;
 import ru.tbank.backend.enums.CategoryType;
 import ru.tbank.backend.enums.TriggerType;
 import ru.tbank.backend.factory.NoteTriggerEntityFactory;
@@ -19,6 +19,7 @@ import ru.tbank.backend.repository.NoteRepository;
 import ru.tbank.backend.repository.NoteTriggerRepository;
 import ru.tbank.backend.repository.TriggerRepository;
 import ru.tbank.backend.service.NoteService;
+import ru.tbank.backend.utils.DateTimeParser;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -87,4 +88,53 @@ public class NoteServiceImpl implements NoteService {
         var projections = noteRepository.findNote(noteEntity.getId());
         return noteMapper.mergeProjections(projections);
     }
+
+    @Transactional
+    @Override
+    public NoteDtoWithTriggers updateNote(
+            UUID noteId,
+            UUID userId,
+            CategoryType categoryType,
+            String text,
+            UUID triggerId,
+            String triggerValue
+    ) {
+        var noteEntity = noteRepository.findNoteEntityById(noteId)
+                .orElseThrow(() -> new BadRequestException("Не найдена заметка"));
+
+        if (!userId.equals(noteEntity.getUserId())) {
+            throw new ForbiddenException();
+        }
+
+        if (categoryType != null) {
+            noteEntity.setCategoryType(categoryType);
+        }
+
+        if (text != null) {
+            noteEntity.setText(text);
+        }
+
+        var triggerEntity = triggerRepository.findById(triggerId)
+                .orElseThrow(() -> new BadRequestException("Не найден триггер"));
+
+        if (triggerValue != null) {
+            if (triggerEntity instanceof TriggerTimeEntity) {
+                TriggerTimeEntity timeTrigger = (TriggerTimeEntity) triggerEntity;
+                OffsetDateTime newTime = DateTimeParser.parse(triggerValue);
+                timeTrigger.setTime(newTime);
+            } else if (triggerEntity instanceof TriggerLocationEntity) {
+                TriggerLocationEntity locationTrigger = (TriggerLocationEntity) triggerEntity;
+                locationTrigger.setLocation(triggerValue);
+            } else {
+                throw new BadRequestException("Неподдерживаемый тип триггера");
+            }
+        }
+
+        noteRepository.save(noteEntity);
+        triggerRepository.save(triggerEntity);
+
+        var projections = noteRepository.findNote(noteEntity.getId());
+        return noteMapper.mergeProjections(projections);
+    }
+
 }

@@ -1,6 +1,7 @@
 package ru.tbank.backend.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -10,6 +11,7 @@ import ru.tbank.backend.dto.GptResponse;
 import ru.tbank.backend.dto.NoteDto;
 import ru.tbank.backend.dto.NoteDtoWithTriggers;
 import ru.tbank.backend.dto.NoteTextDto;
+import ru.tbank.backend.enums.CategoryType;
 import ru.tbank.backend.service.NoteService;
 
 import java.util.List;
@@ -56,6 +58,22 @@ public class NoteController {
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
         return noteService.handleNote(response, customUserDetails.getId());
+    }
+
+    @Operation(
+            summary = "Отправить текст заметки на обработку",
+            description = "Позволяет пользователю отправить текст заметки на обработку и получить готовую заметку"
+    )
+    @PutMapping("/{noteId}/update")
+    private NoteDtoWithTriggers updateNote(
+            @PathVariable("noteId") UUID noteId,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @RequestParam(required = false) CategoryType categoryType,
+            @RequestParam(required = false) String text,
+            @RequestParam(required = false) UUID triggerId,
+            @RequestParam(required = false) String triggerValue
+    ) {
+        return noteService.updateNote(noteId, customUserDetails.getId(), categoryType, text, triggerId, triggerValue);
     }
 
 }

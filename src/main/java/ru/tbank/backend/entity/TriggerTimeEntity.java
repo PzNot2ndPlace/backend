@@ -3,11 +3,13 @@ package ru.tbank.backend.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "trigger_time")
@@ -18,7 +20,7 @@ public class TriggerTimeEntity extends TriggerEntity {
 
     public TriggerTimeEntity(UUID id, OffsetDateTime time) {
         this.setId(id);
-        this.time = time;
+        this.setTime(time);
     }
 
 }
