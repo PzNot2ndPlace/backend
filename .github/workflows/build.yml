@@ -25,6 +25,10 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           username: ${{ secrets.DOCKER_USER }}
 
+      - name: Clean old Docker images
+        run: |
+          docker system prune -a -f || true
+
       - name: Build Docker images
         env:
           CI_REGISTRY_IMAGE: ${{ secrets.CI_REGISTRY_IMAGE }}
