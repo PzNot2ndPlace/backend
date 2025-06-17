@@ -76,4 +76,10 @@ jobs:
           chmod +x ./deploy.sh
 
       - name: Deploy Docker Image
+        env:
+          APP_VERSION: ${{ env.APP_VERSION }}
+          SPRING_DATASOURCE_URL: ${{ secrets.SPRING_DATASOURCE_URL }}
+          SPRING_DATASOURCE_USERNAME: ${{ secrets.POSTGRES_USER }}
+          SPRING_DATASOURCE_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          JWT_SIGNING_KEY: ${{ secrets.JWT_SIGNING_KEY }}
         run: ./deploy.sh
