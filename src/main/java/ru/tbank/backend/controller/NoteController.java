@@ -1,15 +1,14 @@
 package ru.tbank.backend.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.tbank.backend.config.userDetails.CustomUserDetails;
 import ru.tbank.backend.dto.GptResponse;
-import ru.tbank.backend.dto.NoteDto;
 import ru.tbank.backend.dto.NoteDtoWithTriggers;
+import ru.tbank.backend.dto.NoteDtoWithTriggersResponse;
 import ru.tbank.backend.dto.NoteTextDto;
 import ru.tbank.backend.enums.CategoryType;
 import ru.tbank.backend.service.NoteService;
@@ -53,7 +52,7 @@ public class NoteController {
             description = "Позволяет пользователю отправить текст заметки на обработку и получить готовую заметку"
     )
     @PostMapping("/handle")
-    private NoteDtoWithTriggers handleNote(
+    private NoteDtoWithTriggersResponse handleNote(
             @RequestBody GptResponse response,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
