@@ -140,6 +140,8 @@ public class NoteServiceImpl implements NoteService {
             }
         }
 
+        noteEntity.setUpdatedAt(OffsetDateTime.now());
+
         noteRepository.save(noteEntity);
         triggerRepository.save(triggerEntity);
 
