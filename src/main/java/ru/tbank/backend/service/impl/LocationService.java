@@ -60,8 +60,8 @@ public class LocationService {
     @Transactional
     public void acceptCoords(UUID userId, String coords) {
         List<LocationEntity> locations = locationRepository.findAllByUserId(userId);
-        for(LocationEntity l: locations) {
-            if (isNear(l.getCoords(), coords)) {
+        for(LocationEntity l: locations){
+            if (isNear(l.getCoords(), coords)){
                 log.info("близко {}", coords);
                 List<NoteProjection> notes = noteRepository.findLocationNotes(userId, l.getName());
 
