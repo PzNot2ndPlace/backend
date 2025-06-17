@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.tbank.backend.dto.TriggerDto;
 import ru.tbank.backend.dto.TriggerLocationDto;
@@ -17,11 +18,13 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class TriggerMapper {
     private final ObjectMapper objectMapper;
 
     @PostConstruct
     public void init() {
+        log.info("---------------------------------------------------------------------------");
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.registerSubtypes(TriggerTimeDto.class, TriggerLocationDto.class);
     }
