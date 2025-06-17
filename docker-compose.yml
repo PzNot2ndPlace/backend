@@ -27,6 +27,7 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - JWT_SIGNING_KEY=${JWT_SIGNING_KEY}
+      - FIREBASE_CONFIG_JSON=${FIREBASE_CONFIG_JSON}
     healthcheck:
       test: curl http://notes:8080 || exit 0
       interval: 10s
