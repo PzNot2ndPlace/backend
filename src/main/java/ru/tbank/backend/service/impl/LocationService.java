@@ -8,8 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import ru.tbank.backend.dto.LocationDto;
 import ru.tbank.backend.dto.LocationRequestDto;
-import ru.tbank.backend.dto.LocationsDto;
+import ru.tbank.backend.dto.LocationsForModelDto;
 import ru.tbank.backend.entity.LocationEntity;
 import ru.tbank.backend.repository.LocationRepository;
 
@@ -25,13 +26,24 @@ public class LocationService {
     }
 
     @Transactional
-    public LocationsDto getLocations(UUID userId) {
+    public LocationsForModelDto getLocationsForModel(UUID userId) {
 
         List<LocationEntity> locations = locationRepository.findAllByUserId(userId);
         List<String> result = new LinkedList<>();
         for (LocationEntity e : locations) {
             result.add(e.getName());
         }
-        return new LocationsDto(result);
+        return new LocationsForModelDto(result);
+    }
+
+    @Transactional
+    public List<LocationDto> getLocations(UUID userId) {
+
+        List<LocationEntity> locations = locationRepository.findAllByUserId(userId);
+        List<LocationDto> result = new LinkedList<>();
+        for (LocationEntity e : locations) {
+            result.add(new LocationDto(e.getId(), e.getName(), e.getCoords()));
+        }
+        return result;
     }
 }

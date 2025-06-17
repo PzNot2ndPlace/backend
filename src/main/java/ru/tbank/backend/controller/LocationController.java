@@ -5,9 +5,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import ru.tbank.backend.config.userDetails.CustomUserDetails;
+import ru.tbank.backend.dto.LocationDto;
 import ru.tbank.backend.dto.LocationRequestDto;
-import ru.tbank.backend.dto.LocationsDto;
+import ru.tbank.backend.dto.LocationsForModelDto;
 import ru.tbank.backend.service.impl.LocationService;
+
+import java.util.List;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,8 +33,13 @@ public class LocationController {
         locationService.addLocation(request, customUserDetails.getId());
     }
 
+    @GetMapping("for/model")
+    public LocationsForModelDto getLocationsForModel(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        return locationService.getLocationsForModel(customUserDetails.getId());
+    }
+
     @GetMapping()
-    public LocationsDto getMethodName(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+    public List<LocationDto>  getLocations(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
         return locationService.getLocations(customUserDetails.getId());
     }
 }

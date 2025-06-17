@@ -1,6 +1,6 @@
 package ru.tbank.backend.dto;
 
-import java.util.List;
+import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LocationsDto {
-    private List<String> locations;
+public class LocationDto {
+    private UUID id;
+    private String name;
+    private String coords;
 }
