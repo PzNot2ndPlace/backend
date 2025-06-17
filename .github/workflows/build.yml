@@ -28,7 +28,7 @@ jobs:
       - name: Build Docker images
         env:
           CI_REGISTRY_IMAGE: ${{ secrets.CI_REGISTRY_IMAGE }}
-        run: docker-compose build notes-app --no-cache
+        run: docker-compose build --no-cache notes-app
 
       - name: List images
         run: docker images
