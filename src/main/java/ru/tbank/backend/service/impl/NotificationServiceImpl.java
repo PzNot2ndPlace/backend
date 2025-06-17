@@ -42,6 +42,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public void sendNotification(UUID userId, String title, String body) {
+        log.info("Начало отправки уведомления");
         var tokens = repository.findAllByUserId(userId);
 
         tokens.forEach(it -> {

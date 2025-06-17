@@ -1,12 +1,10 @@
 package ru.tbank.backend.dto;
 
-import org.springframework.beans.factory.annotation.Value;
 import ru.tbank.backend.enums.TriggerType;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
-import java.util.List;
 import java.util.UUID;
 
 public interface NoteProjection {
