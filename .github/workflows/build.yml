@@ -91,6 +91,7 @@ jobs:
           SPRING_DATASOURCE_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           JWT_SIGNING_KEY: ${{ secrets.JWT_SIGNING_KEY }}
           FIREBASE_CONFIG_JSON: ${{ secrets.FIREBASE_CONFIG_JSON }}
+          HINTS_URL: ${{ secrets.HINTS_URL }}
         run: |
           docker run -d \
             --name notes-app \
@@ -102,4 +103,5 @@ jobs:
             -e SPRING_DATASOURCE_PASSWORD="$SPRING_DATASOURCE_PASSWORD" \
             -e FIREBASE_CONFIG_JSON="FIREBASE_CONFIG_JSON" \
             -e JWT_SIGNING_KEY="$JWT_SIGNING_KEY" \
+            -e HINTS_URL="$HINTS_URL" \
             brawleryura1/notes-app:latest
