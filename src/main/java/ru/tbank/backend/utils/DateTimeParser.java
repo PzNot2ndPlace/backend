@@ -27,4 +27,11 @@ public class DateTimeParser {
                     "Invalid date-time format. Expected format: yyyy-MM-dd HH:mm", e);
         }
     }
+
+    public static String formatOffsetDateTime(OffsetDateTime dateTime) {
+        if (dateTime == null) {
+            return null;
+        }
+        return dateTime.format(FORMATTER);
+    }
 }

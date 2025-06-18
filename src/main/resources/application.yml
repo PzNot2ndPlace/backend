@@ -22,3 +22,6 @@ firebase:
 
 weatherApi:
   token: 5390f8d494c44cde982164605251706
+
+hints:
+  url: ${HINTS_URL:http://45.141.78.50:8800/entities/get_text_based_hint}

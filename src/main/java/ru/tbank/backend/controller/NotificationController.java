@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.tbank.backend.config.userDetails.CustomUserDetails;
 import ru.tbank.backend.service.NotificationService;
+import ru.tbank.backend.service.impl.HintNoteSchedulerService;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,12 +19,18 @@ import ru.tbank.backend.service.NotificationService;
 public class NotificationController {
 
     private final NotificationService notificationService;
+    private final HintNoteSchedulerService hintNoteSchedulerService;
 
     @PostMapping("/test")
     private void test(
             @RequestParam String message
     ) {
         notificationService.testNotification(message);
+    }
+
+    @PostMapping("/test/hints")
+    private void testHints() {
+        hintNoteSchedulerService.testHints();
     }
 
     @PostMapping("/token/save")
