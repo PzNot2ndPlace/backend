@@ -124,26 +124,29 @@ public class NoteServiceImpl implements NoteService {
             noteEntity.setText(text);
         }
 
-        var triggerEntity = triggerRepository.findById(triggerId)
-                .orElseThrow(() -> new BadRequestException("Не найден триггер"));
+        if (triggerId != null) {
+            var triggerEntity = triggerRepository.findById(triggerId)
+                    .orElseThrow(() -> new BadRequestException("Не найден триггер"));
 
-        if (triggerValue != null) {
-            if (triggerEntity instanceof TriggerTimeEntity) {
-                TriggerTimeEntity timeTrigger = (TriggerTimeEntity) triggerEntity;
-                OffsetDateTime newTime = DateTimeParser.parse(triggerValue);
-                timeTrigger.setTime(newTime);
-            } else if (triggerEntity instanceof TriggerLocationEntity) {
-                TriggerLocationEntity locationTrigger = (TriggerLocationEntity) triggerEntity;
-                locationTrigger.setLocation(triggerValue);
-            } else {
-                throw new BadRequestException("Неподдерживаемый тип триггера");
+            if (triggerValue != null) {
+                if (triggerEntity instanceof TriggerTimeEntity) {
+                    TriggerTimeEntity timeTrigger = (TriggerTimeEntity) triggerEntity;
+                    OffsetDateTime newTime = DateTimeParser.parse(triggerValue);
+                    timeTrigger.setTime(newTime);
+                } else if (triggerEntity instanceof TriggerLocationEntity) {
+                    TriggerLocationEntity locationTrigger = (TriggerLocationEntity) triggerEntity;
+                    locationTrigger.setLocation(triggerValue);
+                } else {
+                    throw new BadRequestException("Неподдерживаемый тип триггера");
+                }
             }
+
+            triggerRepository.save(triggerEntity);
         }
 
         noteEntity.setUpdatedAt(OffsetDateTime.now());
 
         noteRepository.save(noteEntity);
-        triggerRepository.save(triggerEntity);
 
         var projections = noteRepository.findNote(noteEntity.getId());
         return noteMapper.mergeProjections(projections);
