@@ -92,6 +92,7 @@ jobs:
           JWT_SIGNING_KEY: ${{ secrets.JWT_SIGNING_KEY }}
           FIREBASE_CONFIG_JSON: ${{ secrets.FIREBASE_CONFIG_JSON }}
           HINTS_URL: ${{ secrets.HINTS_URL }}
+          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
         run: |
           docker run -d \
             --name notes-app \
@@ -104,4 +105,5 @@ jobs:
             -e FIREBASE_CONFIG_JSON="$FIREBASE_CONFIG_JSON" \
             -e JWT_SIGNING_KEY="$JWT_SIGNING_KEY" \
             -e HINTS_URL="$HINTS_URL" \
+            -e MAIL_PASSWORD="$MAIL_PASSWORD" \
             brawleryura1/notes-app:latest
