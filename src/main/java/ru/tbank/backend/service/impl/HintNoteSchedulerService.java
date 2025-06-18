@@ -41,7 +41,7 @@ public class HintNoteSchedulerService {
         for (var user : users) {
             var notes = noteRepository.findByUserId(user.getId());
 
-            if (notes.isEmpty()) {
+            if (notes.isEmpty() || notes.size() < 10) {
                 continue;
             }
 

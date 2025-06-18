@@ -17,6 +17,7 @@ import ru.tbank.backend.dto.NoteProjection;
 import ru.tbank.backend.entity.LocationEntity;
 import ru.tbank.backend.repository.LocationRepository;
 import ru.tbank.backend.repository.NoteRepository;
+import ru.tbank.backend.repository.NoteTriggerRepository;
 import ru.tbank.backend.service.NotificationService;
 
 @Service
@@ -25,6 +26,7 @@ import ru.tbank.backend.service.NotificationService;
 public class LocationService {
     private final LocationRepository locationRepository;
     private final NoteRepository noteRepository;
+    private final NoteTriggerRepository noteTriggerRepository;
     private final NotificationService notificationService;
 
     private final double epsilon = 0.00049;
@@ -74,6 +76,9 @@ public class LocationService {
                         "Напоминание",
                         message.toString()
                     );
+                    var noteTrigger = noteTriggerRepository.findByTriggerId(n.getTriggerId());
+                    noteTrigger.setIsReady(true);
+                    noteTriggerRepository.save(noteTrigger);
                 }
             }
         }
