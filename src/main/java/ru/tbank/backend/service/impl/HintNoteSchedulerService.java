@@ -47,6 +47,8 @@ public class HintNoteSchedulerService {
 
             var context = ContextMapper.mapToContextList(notes);
 
+            log.info("контекст:" + context.toString());
+
             try {
                 ResponseEntity<HintResponse> responseEntity = restTemplate.exchange(
                         url,

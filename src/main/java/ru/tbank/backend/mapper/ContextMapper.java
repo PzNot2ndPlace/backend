@@ -4,6 +4,7 @@ import ru.tbank.backend.dto.Context;
 import ru.tbank.backend.dto.ContextList;
 import ru.tbank.backend.dto.GptTriggerResponse;
 import ru.tbank.backend.dto.NoteProjection;
+import ru.tbank.backend.enums.TriggerType;
 import ru.tbank.backend.utils.CaseConverter;
 import ru.tbank.backend.utils.DateTimeParser;
 
@@ -45,11 +46,22 @@ public class ContextMapper {
             return Collections.emptyList();
         }
 
-        return Collections.singletonList(
-                new GptTriggerResponse(
-                        CaseConverter.toNormalCase(note.getTriggerType().toString()),
-                        note.getTriggerValue()
-                )
-        );
+        if (note.getTriggerType().equals(TriggerType.TIME)) {
+            return Collections.singletonList(
+                    new GptTriggerResponse(
+                            CaseConverter.toNormalCase(note.getTriggerType().toString()),
+                            DateTimeParser.formatOffsetDateTime(
+                                    DateTimeParser.convertStringToOffsetTime(note.getTriggerValue())
+                            )
+                    )
+            );
+        } else {
+            return Collections.singletonList(
+                    new GptTriggerResponse(
+                            CaseConverter.toNormalCase(note.getTriggerType().toString()),
+                            note.getTriggerValue()
+                    )
+            );
+        }
     }
 }

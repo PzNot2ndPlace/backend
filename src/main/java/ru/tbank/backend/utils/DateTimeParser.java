@@ -34,4 +34,14 @@ public class DateTimeParser {
         }
         return dateTime.format(FORMATTER);
     }
+
+    public static OffsetDateTime convertStringToOffsetTime(String timeString) {
+        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSX");
+        DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssX");
+        try {
+            return OffsetDateTime.parse(timeString, formatter1);
+        } catch (Exception e) {
+            return OffsetDateTime.parse(timeString, formatter2);
+        }
+    }
 }
