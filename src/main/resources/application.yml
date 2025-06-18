@@ -13,6 +13,18 @@ spring:
     enabled: true
     change-log: classpath:/db/changelog/dbchangelog.xml
 
+  mail:
+    host: smtp.yandex.ru
+    port: 587
+    username: den700l@yandex.ru
+    password: ${MAIL_PASSWORD}
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 jwt:
   signing-key: ${JWT_SIGNING_KEY}
   expiration-time: 100000000000000

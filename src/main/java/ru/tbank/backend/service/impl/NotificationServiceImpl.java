@@ -21,6 +21,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     private final FcmTokenRepository repository;
     private final FirebaseMessaging firebaseMessaging;
+    private final EmailService emailService;
 
     @Override
     public void testNotification(String message) {
@@ -49,6 +50,7 @@ public class NotificationServiceImpl implements NotificationService {
                     sendNotification(it.getToken(), title, body);
                 }
         );
+        emailService.sendEmail(userId, title, body);
     }
 
     private void sendNotification(String token, String title, String body) {
